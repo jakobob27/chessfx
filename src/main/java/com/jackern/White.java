@@ -5,10 +5,4 @@ public class White extends Player {
         super();
     }
 
-    @Override
-    public void update(ChessPiece piece) {
-        if (piece.getColor().equals("white")) {
-            pieces.add(piece);
-        }
-    }
 }

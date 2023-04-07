@@ -6,11 +6,4 @@ public class Black extends Player {
         super();
     }
 
-    @Override
-    public void update(ChessPiece piece) {
-        if (piece.getColor().equals("black")) {
-            pieces.add(piece);
-        }
-    }
-
 }

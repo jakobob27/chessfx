@@ -4,6 +4,8 @@ public abstract class ChessPiece {
     private String color;
     private String id;
     private int value;
+    private int xpos;
+    private int ypos;
 
     public abstract boolean validMove(int xpos, int ypos);
 
@@ -50,4 +52,23 @@ public abstract class ChessPiece {
         return color;
     }
 
+    public String getID() {
+        return id;
+    }
+
+    public int getXPos() {
+        return xpos;
+    }
+
+    public int getYPos() {
+        return ypos;
+    }
+
+    public void setXPos(int xpos) {
+        this.xpos = xpos;
+    }
+
+    public void setYPos(int ypos) {
+        this.ypos = ypos;
+    }
 }

@@ -2,7 +2,7 @@ package com.jackern;
 
 import java.util.ArrayList;
 
-public abstract class Player implements BoardListener {
+public abstract class Player {
     protected ArrayList<ChessPiece> pieces = new ArrayList<>();
 
     public Player() {
@@ -12,6 +12,4 @@ public abstract class Player implements BoardListener {
         pieces.add(piece);
     }
 
-    @Override
-    public abstract void update(ChessPiece piece);
 }

@@ -7,7 +7,7 @@ public class Chessboard {
     private ArrayList<ArrayList<ChessPiece>> board = new ArrayList<>();
     private Player white;
     private Player black;
-    private char turn = 'w';
+    private boolean turn = true; // true when it's white's turn, false when it's black's
 
     public Chessboard(Player white, Player black) {
         if (!(white instanceof White || black instanceof Black)) {
@@ -30,31 +30,32 @@ public class Chessboard {
             }
         }
 
-        board.get(0).set(0, new Rook("black"));
-        board.get(1).set(0, new Knight("black"));
-        board.get(2).set(0, new Bishop("black"));
-        board.get(3).set(0, new Queen("black"));
-        board.get(4).set(0, new King("black"));
-        board.get(5).set(0, new Bishop("black"));
-        board.get(6).set(0, new Knight("black"));
-        board.get(7).set(0, new Rook("black"));
+        addPiece(0, 0, new Rook("black"));
+        addPiece(1, 0, new Knight("black"));
+        addPiece(2, 0, new Bishop("black"));
+        addPiece(3, 0, new Queen("black"));
+        addPiece(4, 0, new King("black"));
+        addPiece(5, 0, new Bishop("black"));
+        addPiece(6, 0, new Knight("black"));
+        addPiece(7, 0, new Rook("black"));
 
         for (int i = 0; i < 8; i++) {
-            board.get(i).set(1, new Pawn("black"));
+            addPiece(i, 1, new Pawn("black"));
         }
 
-        board.get(0).set(7, new Rook("white"));
-        board.get(1).set(7, new Knight("white"));
-        board.get(2).set(7, new Bishop("white"));
-        board.get(3).set(7, new Queen("white"));
-        board.get(4).set(7, new King("white"));
-        board.get(5).set(7, new Bishop("white"));
-        board.get(6).set(7, new Knight("white"));
-        board.get(7).set(7, new Rook("white"));
+        addPiece(0, 7, new Rook("white"));
+        addPiece(1, 7, new Knight("white"));
+        addPiece(2, 7, new Bishop("white"));
+        addPiece(3, 7, new Queen("white"));
+        addPiece(4, 7, new King("white"));
+        addPiece(5, 7, new Bishop("white"));
+        addPiece(6, 7, new Knight("white"));
+        addPiece(7, 7, new Rook("white"));
 
         for (int i = 0; i < 8; i++) {
-            board.get(i).set(6, new Pawn("white"));
+            addPiece(i, 6, new Pawn("white"));
         }
+        updateListeners();
     }
 
     public ArrayList<ArrayList<ChessPiece>> getBoardCopy() {
@@ -65,10 +66,26 @@ public class Chessboard {
     public void updateListeners() {
         for (ArrayList<ChessPiece> list : board) {
             for (ChessPiece piece : list) {
-                for (BoardListener listener : listeners) {
-                    listener.update(piece);
+                if (piece != null) {
+                    for (BoardListener listener : listeners) {
+                        listener.update(piece);
+                    }
                 }
             }
+        }
+    }
+
+    public void addPiece(int xpos, int ypos, ChessPiece piece) {
+        if (!(board.get(xpos).get(ypos) == null)) {
+            throw new IllegalArgumentException("Space is occupied");
+        }
+        board.get(xpos).set(ypos, piece);
+        piece.setXPos(xpos);
+        piece.setYPos(ypos);
+        if (piece.getColor().equals("white")) {
+            white.addPiece(piece);
+        } else if (piece.getColor().equals("black")) {
+            black.addPiece(piece);
         }
     }
 
@@ -80,11 +97,12 @@ public class Chessboard {
         listeners.remove(listener);
     }
 
-    public char getTurn() {
+    public boolean getTurn() {
         return turn;
     }
 
-    public void setTurn(char turn) {
+    public void setTurn(boolean turn) {
         this.turn = turn;
     }
+
 }
