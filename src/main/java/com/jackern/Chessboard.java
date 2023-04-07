@@ -89,6 +89,13 @@ public class Chessboard {
         }
     }
 
+    public void movePiece(ChessPiece piece, int xpos, int ypos) {
+        board.get(piece.getXPos()).set(piece.getYPos(), null);
+        board.get(xpos).set(ypos, piece);
+        piece.setXPos(xpos);
+        piece.setYPos(ypos);
+    }
+
     public void addListener(BoardListener listener) {
         listeners.add(listener);
     }

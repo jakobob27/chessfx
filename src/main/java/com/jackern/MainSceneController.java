@@ -5,6 +5,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 public class MainSceneController implements BoardListener {
@@ -28,6 +29,10 @@ public class MainSceneController implements BoardListener {
     private void addImage(String image, int xpos, int ypos) {
         Image png = new Image(MainSceneController.class.getResource(image + ".png").toString());
         ImageView view = new ImageView(png);
+        view.setOnMouseClicked((MouseEvent e) -> {
+            System.out.println("Nice");
+        });
+        ;
         grid.add(view, xpos, ypos);
         GridPane.setHalignment(view, HPos.CENTER);
         GridPane.setValignment(view, VPos.CENTER);
