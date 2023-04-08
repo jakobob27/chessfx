@@ -71,4 +71,9 @@ public abstract class ChessPiece {
     public void setYPos(int ypos) {
         this.ypos = ypos;
     }
+
+    @Override
+    public String toString() {
+        return color + " " + id + " " + xpos + " " + ypos;
+    }
 }

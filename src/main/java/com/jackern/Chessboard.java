@@ -8,6 +8,7 @@ public class Chessboard {
     private Player white;
     private Player black;
     private boolean turn = true; // true when it's white's turn, false when it's black's
+    private ChessPiece selectedPiece;
 
     public Chessboard(Player white, Player black) {
         if (!(white instanceof White || black instanceof Black)) {
@@ -73,6 +74,7 @@ public class Chessboard {
                 }
             }
         }
+        MainSceneController.updateCompleted();
     }
 
     public void addPiece(int xpos, int ypos, ChessPiece piece) {
@@ -94,6 +96,11 @@ public class Chessboard {
         board.get(xpos).set(ypos, piece);
         piece.setXPos(xpos);
         piece.setYPos(ypos);
+        updateListeners();
+    }
+
+    public void selectPiece(ChessPiece piece) {
+        this.selectedPiece = piece;
     }
 
     public void addListener(BoardListener listener) {
@@ -110,6 +117,10 @@ public class Chessboard {
 
     public void setTurn(boolean turn) {
         this.turn = turn;
+    }
+
+    public ChessPiece getSelectedPiece() {
+        return selectedPiece;
     }
 
 }
