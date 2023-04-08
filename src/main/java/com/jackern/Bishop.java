@@ -2,8 +2,8 @@ package com.jackern;
 
 public class Bishop extends ChessPiece {
 
-    public Bishop(String color) {
-        super("bishop", color);
+    public Bishop(Chessboard board, String color) {
+        super(board, "bishop", color);
     }
 
     @Override

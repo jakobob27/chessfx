@@ -2,8 +2,8 @@ package com.jackern;
 
 public class Rook extends ChessPiece {
 
-    public Rook(String color) {
-        super("rook", color);
+    public Rook(Chessboard board, String color) {
+        super(board, "rook", color);
     }
 
     @Override

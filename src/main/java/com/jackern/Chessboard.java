@@ -31,30 +31,30 @@ public class Chessboard {
             }
         }
 
-        addPiece(0, 0, new Rook("black"));
-        addPiece(1, 0, new Knight("black"));
-        addPiece(2, 0, new Bishop("black"));
-        addPiece(3, 0, new Queen("black"));
-        addPiece(4, 0, new King("black"));
-        addPiece(5, 0, new Bishop("black"));
-        addPiece(6, 0, new Knight("black"));
-        addPiece(7, 0, new Rook("black"));
+        addPiece(0, 0, new Rook(this, "black"));
+        addPiece(1, 0, new Knight(this, "black"));
+        addPiece(2, 0, new Bishop(this, "black"));
+        addPiece(3, 0, new Queen(this, "black"));
+        addPiece(4, 0, new King(this, "black"));
+        addPiece(5, 0, new Bishop(this, "black"));
+        addPiece(6, 0, new Knight(this, "black"));
+        addPiece(7, 0, new Rook(this, "black"));
 
         for (int i = 0; i < 8; i++) {
-            addPiece(i, 1, new Pawn("black"));
+            addPiece(i, 1, new Pawn(this, "black"));
         }
 
-        addPiece(0, 7, new Rook("white"));
-        addPiece(1, 7, new Knight("white"));
-        addPiece(2, 7, new Bishop("white"));
-        addPiece(3, 7, new Queen("white"));
-        addPiece(4, 7, new King("white"));
-        addPiece(5, 7, new Bishop("white"));
-        addPiece(6, 7, new Knight("white"));
-        addPiece(7, 7, new Rook("white"));
+        addPiece(0, 7, new Rook(this, "white"));
+        addPiece(1, 7, new Knight(this, "white"));
+        addPiece(2, 7, new Bishop(this, "white"));
+        addPiece(3, 7, new Queen(this, "white"));
+        addPiece(4, 7, new King(this, "white"));
+        addPiece(5, 7, new Bishop(this, "white"));
+        addPiece(6, 7, new Knight(this, "white"));
+        addPiece(7, 7, new Rook(this, "white"));
 
         for (int i = 0; i < 8; i++) {
-            addPiece(i, 6, new Pawn("white"));
+            addPiece(i, 6, new Pawn(this, "white"));
         }
         updateListeners();
     }
@@ -97,6 +97,10 @@ public class Chessboard {
         piece.setXPos(xpos);
         piece.setYPos(ypos);
         updateListeners();
+    }
+
+    public ChessPiece getPiece(int xpos, int ypos) {
+        return board.get(xpos).get(ypos);
     }
 
     public void selectPiece(ChessPiece piece) {

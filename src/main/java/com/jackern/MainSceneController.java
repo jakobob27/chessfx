@@ -41,6 +41,7 @@ public class MainSceneController implements BoardListener {
                         int xpos = GridPane.getColumnIndex(child);
                         board.movePiece(board.getSelectedPiece(), xpos, ypos);
                         board.selectPiece(null);
+                        System.out.println(board.getSelectedPiece());
                     }
                 });
             }

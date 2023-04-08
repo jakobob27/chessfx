@@ -2,8 +2,8 @@ package com.jackern;
 
 public class Queen extends ChessPiece {
 
-    public Queen(String color) {
-        super("queen", color);
+    public Queen(Chessboard board, String color) {
+        super(board, "queen", color);
     }
 
     @Override

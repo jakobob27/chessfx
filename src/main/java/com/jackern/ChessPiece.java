@@ -6,10 +6,12 @@ public abstract class ChessPiece {
     private int value;
     private int xpos;
     private int ypos;
+    protected Chessboard board;
 
     public abstract boolean validMove(int xpos, int ypos);
 
-    public ChessPiece(String id, String color) {
+    public ChessPiece(Chessboard board, String id, String color) {
+        this.board = board;
         validPiece(id, color);
         this.id = id;
         this.color = color;
@@ -41,6 +43,16 @@ public abstract class ChessPiece {
         }
         if (!(color.equals("black") || color.equals("white"))) {
             throw new IllegalArgumentException("Not a valid piece color!");
+        }
+    }
+
+    protected boolean collision(ChessPiece piece, int xpos, int ypos) {
+        if (piece.getColor().equals(board.getPiece(xpos, ypos).getID())) {
+            return true;
+        }
+
+        else {
+            return false;
         }
     }
 

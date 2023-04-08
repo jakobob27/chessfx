@@ -2,8 +2,8 @@ package com.jackern;
 
 public class Pawn extends ChessPiece {
 
-    public Pawn(String color) {
-        super("pawn", color);
+    public Pawn(Chessboard board, String color) {
+        super(board, "pawn", color);
     }
 
     @Override
