@@ -46,8 +46,12 @@ public abstract class ChessPiece {
         }
     }
 
-    protected boolean collision(ChessPiece piece, int xpos, int ypos) {
-        if (piece.getColor().equals(board.getPiece(xpos, ypos).getID())) {
+    protected boolean friendlyfire(int xpos, int ypos) {
+        if (board.getPiece(xpos, ypos) == null) {
+            return false;
+        }
+
+        else if (board.getPiece(xpos, ypos).getColor().equals(this.getColor())) {
             return true;
         }
 
