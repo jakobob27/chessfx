@@ -24,7 +24,7 @@ public class Pawn extends ChessPiece {
             return true;
         }
 
-        else if (getColor().equals("black") && (ypos == getYPos())
+        else if (getColor().equals("black") && (ypos == getYPos() + 1)
                 && (xpos == getXPos() && board.getPiece(xpos, ypos) == null
                         || (xpos == getXPos() + 1 || xpos == getXPos() - 1)
                                 && board.getBoardCopy().get(xpos).get(ypos) != null
