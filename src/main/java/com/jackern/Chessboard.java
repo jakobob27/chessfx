@@ -81,6 +81,10 @@ public class Chessboard {
         piece.setYPos(ypos);
     }
 
+    public void removePiece(ChessPiece piece) {
+        board.get(piece.getXPos()).set(piece.getYPos(), null);
+    }
+
     public void movePiece(ChessPiece piece, int xpos, int ypos) {
         if (piece.getXPos() == xpos && piece.getYPos() == ypos) {
             return;
@@ -89,13 +93,13 @@ public class Chessboard {
             System.out.println("Invalid move!");
             return;
         }
-        System.out.println("WOW WOW");
 
         board.get(piece.getXPos()).set(piece.getYPos(), null);
         board.get(xpos).set(ypos, piece);
         piece.setXPos(xpos);
         piece.setYPos(ypos);
         piece.moved();
+        promoteChecker(piece);
         turn = !turn;
         if (turn && whiteCheckChecker()) {
             System.out.println("White is in check!");
@@ -252,5 +256,36 @@ public class Chessboard {
         rook.setXPos(xpos);
         rook.setYPos(ypos);
         rook.moved();
+    }
+
+    private void promoteChecker(ChessPiece piece) {
+        if (((piece instanceof Pawn) && piece.getColor().equals("black") && piece.getYPos() == 7)
+                || ((piece instanceof Pawn) && piece.getColor().equals("white") && piece.getYPos() == 0)) {
+            MainSceneController.startPromotion(piece);
+        }
+    }
+
+    public void promoteToQueen(ChessPiece piece) {
+        removePiece(piece);
+        addPiece(piece.getXPos(), piece.getYPos(), new Queen(this, piece.getColor()));
+        updateListeners();
+    }
+
+    public void promoteToRook(ChessPiece piece) {
+        removePiece(piece);
+        addPiece(piece.getXPos(), piece.getYPos(), new Rook(this, piece.getColor()));
+        updateListeners();
+    }
+
+    public void promoteToBishop(ChessPiece piece) {
+        removePiece(piece);
+        addPiece(piece.getXPos(), piece.getYPos(), new Bishop(this, piece.getColor()));
+        updateListeners();
+    }
+
+    public void promoteToKnight(ChessPiece piece) {
+        removePiece(piece);
+        addPiece(piece.getXPos(), piece.getYPos(), new Knight(this, piece.getColor()));
+        updateListeners();
     }
 }

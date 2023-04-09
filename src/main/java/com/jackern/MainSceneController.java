@@ -14,11 +14,31 @@ import javafx.scene.layout.Pane;
 
 public class MainSceneController implements BoardListener {
 
-    private Chessboard board;
+    private static Chessboard board;
     private static boolean updateComplete;
+    private static boolean promotion;
+    private static ChessPiece promoting;
 
     @FXML
     private GridPane grid;
+
+    @FXML
+    private GridPane promoteGrid;
+
+    @FXML
+    private Pane promoteBackround;
+
+    @FXML
+    private static ImageView queenPromote;
+
+    @FXML
+    private static ImageView rookPromote;
+
+    @FXML
+    private static ImageView bishopPromote;
+
+    @FXML
+    private static ImageView knightPromote;
 
     @FXML
     public void initialize() {
@@ -86,6 +106,10 @@ public class MainSceneController implements BoardListener {
     @Override
     public void update(ChessPiece piece) {
         if (updateComplete == true) {
+            if (promotion) {
+                promoteScreen(promoting);
+                promotion = false;
+            }
             resetImages();
             updateStarted();
         }
@@ -100,4 +124,79 @@ public class MainSceneController implements BoardListener {
         updateComplete = false;
     }
 
+    @FXML
+    public void promoteScreen(ChessPiece piece) {
+        System.out.println("2" + piece);
+
+        if (piece.getColor().equals("black")) {
+            queenPromote = new ImageView(new Image(App.class.getResource("black-queen.png").toString()));
+            rookPromote = new ImageView(new Image(App.class.getResource("black-rook.png").toString()));
+            bishopPromote = new ImageView(new Image(App.class.getResource("black-bishop.png").toString()));
+            knightPromote = new ImageView(new Image(App.class.getResource("black-knight.png").toString()));
+        }
+
+        else {
+            queenPromote = new ImageView(new Image(App.class.getResource("white-queen.png").toString()));
+            rookPromote = new ImageView(new Image(App.class.getResource("white-rook.png").toString()));
+            bishopPromote = new ImageView(new Image(App.class.getResource("white-bishop.png").toString()));
+            knightPromote = new ImageView(new Image(App.class.getResource("white-knight.png").toString()));
+        }
+
+        promoteGrid.add(queenPromote, 0, 0);
+        promoteGrid.add(rookPromote, 1, 0);
+        promoteGrid.add(bishopPromote, 0, 1);
+        promoteGrid.add(knightPromote, 1, 1);
+
+        queenPromote.setFitWidth(100);
+        queenPromote.setFitHeight(100);
+
+        rookPromote.setFitWidth(100);
+        rookPromote.setFitHeight(100);
+
+        bishopPromote.setFitWidth(100);
+        bishopPromote.setFitHeight(100);
+
+        knightPromote.setFitWidth(100);
+        knightPromote.setFitHeight(100);
+
+        promoteBackround.setLayoutX(300);
+        promoteBackround.setLayoutY(300);
+
+        queenPromote.setOnMouseClicked((MouseEvent e) -> {
+            board.promoteToQueen(piece);
+            hidePromote();
+        });
+
+        rookPromote.setOnMouseClicked((MouseEvent e) -> {
+            board.promoteToRook(piece);
+            hidePromote();
+        });
+
+        bishopPromote.setOnMouseClicked((MouseEvent e) -> {
+            board.promoteToBishop(piece);
+            hidePromote();
+        });
+
+        knightPromote.setOnMouseClicked((MouseEvent e) -> {
+            board.promoteToKnight(piece);
+            hidePromote();
+        });
+    }
+
+    private void hidePromote() {
+        promoteBackround.setLayoutX(-227);
+        Iterator<Node> iterator = promoteGrid.getChildren().iterator();
+        while (iterator.hasNext()) {
+            Node node = iterator.next();
+            if (node instanceof ImageView) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public static void startPromotion(ChessPiece piece) {
+        promotion = true;
+        promoting = piece;
+        System.out.println(promoting);
+    }
 }
