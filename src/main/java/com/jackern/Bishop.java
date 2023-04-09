@@ -8,8 +8,14 @@ public class Bishop extends ChessPiece {
 
     @Override
     public boolean validMove(int xpos, int ypos) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validMove'");
+        int xdiff = Math.abs(xpos - getXPos());
+        int ydiff = Math.abs(ypos - getYPos());
+
+        if (xdiff == ydiff) {
+            return true;
+        }
+
+        return false;
     }
 
 }

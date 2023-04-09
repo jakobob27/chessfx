@@ -8,8 +8,15 @@ public class Rook extends ChessPiece {
 
     @Override
     public boolean validMove(int xpos, int ypos) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validMove'");
+        if ((xpos > getXPos() || xpos < getXPos()) && ypos == getYPos()) {
+            return true;
+        }
+
+        else if (xpos == getXPos() && (ypos > getYPos() || ypos < getYPos())) {
+            return true;
+        }
+
+        return false;
     }
 
 }

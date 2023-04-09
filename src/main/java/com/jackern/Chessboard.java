@@ -92,13 +92,16 @@ public class Chessboard {
     }
 
     public void movePiece(ChessPiece piece, int xpos, int ypos) {
-        if (piece.friendlyfire(xpos, ypos) || piece.collision(xpos, ypos)) {
+        if (piece.friendlyfire(xpos, ypos) || !piece.validMove(xpos, ypos) || piece.collision(xpos, ypos)) {
+            System.out.println("Invalid move!");
             return;
         }
+
         board.get(piece.getXPos()).set(piece.getYPos(), null);
         board.get(xpos).set(ypos, piece);
         piece.setXPos(xpos);
         piece.setYPos(ypos);
+        turn = !turn;
         updateListeners();
     }
 
@@ -107,6 +110,10 @@ public class Chessboard {
     }
 
     public void selectPiece(ChessPiece piece) {
+        if (piece != null && (!turn && piece.getColor().equals("white") || turn && piece.getColor().equals("black"))) {
+            System.out.println("Not your turn!");
+            return;
+        }
         this.selectedPiece = piece;
     }
 
