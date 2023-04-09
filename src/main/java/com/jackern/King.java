@@ -20,6 +20,27 @@ public class King extends ChessPiece {
             return true;
         }
 
+        else if (!hasMoved() && xpos == 2 && !board.getPiece(0, getYPos()).hasMoved()) {
+            for (int i = 0; i < 3; i++) {
+                if (board.selfCheck(this, getXPos() - i, ypos)) {
+                    return false;
+                }
+            }
+            board.castle(board.getPiece(0, ypos), 3, ypos);
+            return true;
+        }
+
+        else if (!hasMoved() && xpos == 6 && !board.getPiece(7, getYPos()).hasMoved()) {
+            for (int i = 0; i < 3; i++) {
+                if (board.selfCheck(this, getXPos() + i, ypos)) {
+                    return false;
+                }
+            }
+            board.castle(board.getPiece(7, ypos), 5, ypos);
+            return true;
+
+        }
+
         return false;
     }
 

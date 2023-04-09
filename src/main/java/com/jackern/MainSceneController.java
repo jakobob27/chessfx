@@ -14,8 +14,6 @@ import javafx.scene.layout.Pane;
 
 public class MainSceneController implements BoardListener {
 
-    private White white;
-    private Black black;
     private Chessboard board;
     private static boolean updateComplete;
 
@@ -24,9 +22,7 @@ public class MainSceneController implements BoardListener {
 
     @FXML
     public void initialize() {
-        white = new White();
-        black = new Black();
-        board = new Chessboard(white, black);
+        board = new Chessboard();
         board.addListener(this);
         initBoardClick();
         board.init();

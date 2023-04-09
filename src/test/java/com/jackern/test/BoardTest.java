@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import com.jackern.Bishop;
-import com.jackern.Black;
 import com.jackern.BoardListener;
 import com.jackern.ChessPiece;
 import com.jackern.Chessboard;
@@ -17,7 +16,6 @@ import com.jackern.Knight;
 import com.jackern.Pawn;
 import com.jackern.Queen;
 import com.jackern.Rook;
-import com.jackern.White;
 
 public class BoardTest implements BoardListener {
     private Chessboard board;
@@ -26,9 +24,7 @@ public class BoardTest implements BoardListener {
     @BeforeEach
     public void init() {
         checker = false;
-        White white = new White();
-        Black black = new Black();
-        board = new Chessboard(white, black);
+        board = new Chessboard();
     }
 
     @Test
@@ -76,6 +72,7 @@ public class BoardTest implements BoardListener {
 
     @Test
     public void ListenerTest() {
+        board.init();
         board.addListener(this);
         board.updateListeners();
         assertTrue(checker);

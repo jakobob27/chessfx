@@ -5,17 +5,12 @@ import java.util.ArrayList;
 public class Chessboard {
     private ArrayList<BoardListener> listeners = new ArrayList<>();
     private ArrayList<ArrayList<ChessPiece>> board = new ArrayList<>();
-    private Player white;
-    private Player black;
+    private ChessPiece whiteKing;
+    private ChessPiece blackKing;
     private boolean turn = true; // true when it's white's turn, false when it's black's
     private ChessPiece selectedPiece;
 
-    public Chessboard(Player white, Player black) {
-        if (!(white instanceof White || black instanceof Black)) {
-            throw new IllegalArgumentException("Not valid players!");
-        }
-        this.white = white;
-        this.black = black;
+    public Chessboard() {
         for (int i = 0; i < 8; i++) {
             board.add(new ArrayList<ChessPiece>());
             for (int j = 0; j < 8; j++) {
@@ -35,7 +30,7 @@ public class Chessboard {
         addPiece(1, 0, new Knight(this, "black"));
         addPiece(2, 0, new Bishop(this, "black"));
         addPiece(3, 0, new Queen(this, "black"));
-        addPiece(4, 0, new King(this, "black"));
+        addPiece(4, 0, blackKing = new King(this, "black"));
         addPiece(5, 0, new Bishop(this, "black"));
         addPiece(6, 0, new Knight(this, "black"));
         addPiece(7, 0, new Rook(this, "black"));
@@ -48,7 +43,7 @@ public class Chessboard {
         addPiece(1, 7, new Knight(this, "white"));
         addPiece(2, 7, new Bishop(this, "white"));
         addPiece(3, 7, new Queen(this, "white"));
-        addPiece(4, 7, new King(this, "white"));
+        addPiece(4, 7, whiteKing = new King(this, "white"));
         addPiece(5, 7, new Bishop(this, "white"));
         addPiece(6, 7, new Knight(this, "white"));
         addPiece(7, 7, new Rook(this, "white"));
@@ -84,24 +79,29 @@ public class Chessboard {
         board.get(xpos).set(ypos, piece);
         piece.setXPos(xpos);
         piece.setYPos(ypos);
-        if (piece.getColor().equals("white")) {
-            white.addPiece(piece);
-        } else if (piece.getColor().equals("black")) {
-            black.addPiece(piece);
-        }
     }
 
     public void movePiece(ChessPiece piece, int xpos, int ypos) {
-        if (piece.friendlyfire(xpos, ypos) || !piece.validMove(xpos, ypos) || piece.collision(xpos, ypos)) {
+        if (piece.getXPos() == xpos && piece.getYPos() == ypos) {
+            return;
+        } else if (piece.friendlyfire(xpos, ypos) || piece.collision(xpos, ypos)
+                || selfCheck(piece, xpos, ypos) || !piece.validMove(xpos, ypos)) {
             System.out.println("Invalid move!");
             return;
         }
+        System.out.println("WOW WOW");
 
         board.get(piece.getXPos()).set(piece.getYPos(), null);
         board.get(xpos).set(ypos, piece);
         piece.setXPos(xpos);
         piece.setYPos(ypos);
+        piece.moved();
         turn = !turn;
+        if (turn && whiteCheckChecker()) {
+            System.out.println("White is in check!");
+        } else if (!turn && blackCheckChecker()) {
+            System.out.println("Black is in check!");
+        }
         updateListeners();
     }
 
@@ -115,6 +115,107 @@ public class Chessboard {
             return;
         }
         this.selectedPiece = piece;
+    }
+
+    public boolean selfCheck(ChessPiece piece, int xpos, int ypos) {
+        ChessPiece newPositionPiece = board.get(xpos).get(ypos);
+        int xprev = piece.getXPos();
+        int yprev = piece.getYPos();
+
+        board.get(piece.getXPos()).set(piece.getYPos(), null);
+        board.get(xpos).set(ypos, piece);
+        piece.setXPos(xpos);
+        piece.setYPos(ypos);
+
+        if (turn && whiteCheckChecker()) {
+            board.get(xpos).set(ypos, newPositionPiece);
+            board.get(xprev).set(yprev, piece);
+            piece.setXPos(xprev);
+            piece.setYPos(yprev);
+            return true;
+        }
+
+        else if (!turn && blackCheckChecker()) {
+            board.get(xpos).set(ypos, newPositionPiece);
+            board.get(xprev).set(yprev, piece);
+            piece.setXPos(xprev);
+            piece.setYPos(yprev);
+            return true;
+        }
+
+        board.get(xpos).set(ypos, newPositionPiece);
+        board.get(xprev).set(yprev, piece);
+        piece.setXPos(xprev);
+        piece.setYPos(yprev);
+
+        return false;
+
+    }
+
+    public boolean whiteCheckChecker() {
+        for (ArrayList<ChessPiece> list : board) {
+            for (ChessPiece piece : list) {
+                if (piece instanceof ChessPiece) {
+                    if ((piece instanceof King) && piece.getColor().equals("black")) {
+                        if (piece.getXPos() == whiteKing.getXPos() + 1
+                                && (piece.getYPos() == whiteKing.getYPos() || piece.getYPos() == whiteKing.getYPos() + 1
+                                        || piece.getYPos() == whiteKing.getYPos() - 1)) {
+                            return true;
+                        }
+
+                        else if (piece.getXPos() == whiteKing.getXPos() && (piece.getYPos() == whiteKing.getYPos() + 1
+                                || piece.getYPos() == whiteKing.getYPos() - 1)) {
+                            return true;
+                        }
+
+                        else if (piece.getXPos() == whiteKing.getXPos() - 1
+                                && (piece.getYPos() == whiteKing.getYPos() || piece.getYPos() == whiteKing.getYPos() + 1
+                                        || piece.getYPos() == whiteKing.getYPos() - 1)) {
+                            return true;
+                        }
+                    } else if (piece.getColor().equals("black")
+                            && piece.validMove(whiteKing.getXPos(), whiteKing.getYPos())
+                            && !piece.collision(whiteKing.getXPos(), whiteKing.getYPos())) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean blackCheckChecker() {
+        for (ArrayList<ChessPiece> list : board) {
+            for (ChessPiece piece : list) {
+                if (piece instanceof ChessPiece) {
+                    if ((piece instanceof King) && piece.getColor().equals("white")) {
+                        if (piece.getXPos() == blackKing.getXPos() + 1
+                                && (piece.getYPos() == blackKing.getYPos() || piece.getYPos() == blackKing.getYPos() + 1
+                                        || piece.getYPos() == blackKing.getYPos() - 1)) {
+                            return true;
+                        }
+
+                        else if (piece.getXPos() == blackKing.getXPos() && (piece.getYPos() == blackKing.getYPos() + 1
+                                || piece.getYPos() == blackKing.getYPos() - 1)) {
+                            return true;
+                        }
+
+                        else if (piece.getXPos() == blackKing.getXPos() - 1
+                                && (piece.getYPos() == blackKing.getYPos() || piece.getYPos() == blackKing.getYPos() + 1
+                                        || piece.getYPos() == blackKing.getYPos() - 1)) {
+                            return true;
+                        }
+                    } else if (piece.getColor().equals("white")
+                            && piece.validMove(blackKing.getXPos(), blackKing.getYPos())
+                            && !piece.collision(blackKing.getXPos(), blackKing.getYPos())) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public void addListener(BoardListener listener) {
@@ -137,4 +238,19 @@ public class Chessboard {
         return selectedPiece;
     }
 
+    public ChessPiece getWhiteKing() {
+        return whiteKing;
+    }
+
+    public ChessPiece getBlackKing() {
+        return blackKing;
+    }
+
+    public void castle(ChessPiece rook, int xpos, int ypos) {
+        board.get(rook.getXPos()).set(rook.getYPos(), null);
+        board.get(xpos).set(ypos, rook);
+        rook.setXPos(xpos);
+        rook.setYPos(ypos);
+        rook.moved();
+    }
 }

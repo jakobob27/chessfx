@@ -7,6 +7,7 @@ public abstract class ChessPiece {
     private int xpos;
     private int ypos;
     protected Chessboard board;
+    private boolean hasMoved = false;
 
     public abstract boolean validMove(int xpos, int ypos);
 
@@ -34,6 +35,14 @@ public abstract class ChessPiece {
             default:
                 throw new IllegalArgumentException("Not a valid piece!");
         }
+    }
+
+    public void moved() {
+        hasMoved = true;
+    }
+
+    public boolean hasMoved() {
+        return hasMoved;
     }
 
     private void validPiece(String id, String color) {
