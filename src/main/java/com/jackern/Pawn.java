@@ -8,7 +8,15 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean validMove(int xpos, int ypos) {
-        if (getColor().equals("white") && (ypos == getYPos() - 1 || ypos == getYPos() - 2 && !hasMoved())
+        if (getColor().equals("black") && (ypos == getYPos() + 2 && !hasMoved())) {
+            justMoved = true;
+            return true;
+        }
+
+        else if (getColor().equals("white") && (ypos == getYPos() - 2 && !hasMoved())) {
+            justMoved = true;
+            return true;
+        } else if (getColor().equals("white") && (ypos == getYPos() - 1)
                 && (xpos == getXPos() && board.getPiece(xpos, ypos) == null
                         || (xpos == getXPos() + 1 || xpos == getXPos() - 1)
                                 && board.getPiece(xpos, ypos) != null
@@ -16,11 +24,21 @@ public class Pawn extends ChessPiece {
             return true;
         }
 
-        else if (getColor().equals("black") && (ypos == getYPos() + 1 || ypos == getYPos() + 2 && !hasMoved())
+        else if (getColor().equals("black") && (ypos == getYPos())
                 && (xpos == getXPos() && board.getPiece(xpos, ypos) == null
                         || (xpos == getXPos() + 1 || xpos == getXPos() - 1)
                                 && board.getBoardCopy().get(xpos).get(ypos) != null
                                 && ypos == getYPos() + 1)) {
+            return true;
+        } else if (getColor().equals("white") && ypos == getYPos() - 1 && (board.getPiece(xpos, ypos + 1) != null)
+                && board.getPiece(xpos, ypos + 1) instanceof Pawn && board.getPiece(xpos, ypos + 1).justMoved()) {
+            board.enpessant(this, xpos, ypos);
+            return true;
+        }
+
+        else if (getColor().equals("black") && ypos == getYPos() + 1 && (board.getPiece(xpos, ypos - 1) != null)
+                && board.getPiece(xpos, ypos - 1) instanceof Pawn && board.getPiece(xpos, ypos - 1).justMoved()) {
+            board.enpessant(this, xpos, ypos);
             return true;
         }
         return false;

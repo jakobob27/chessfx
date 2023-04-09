@@ -8,6 +8,7 @@ public abstract class ChessPiece {
     private int ypos;
     protected Chessboard board;
     private boolean hasMoved = false;
+    protected boolean justMoved = false;
 
     public abstract boolean validMove(int xpos, int ypos);
 
@@ -141,6 +142,14 @@ public abstract class ChessPiece {
             }
         }
         return false;
+    }
+
+    public boolean justMoved() {
+        return justMoved;
+    }
+
+    public void didnotMove() {
+        justMoved = false;
     }
 
     public int getValue() {

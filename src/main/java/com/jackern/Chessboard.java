@@ -98,6 +98,13 @@ public class Chessboard {
         board.get(xpos).set(ypos, piece);
         piece.setXPos(xpos);
         piece.setYPos(ypos);
+        for (ArrayList<ChessPiece> list : board) {
+            for (ChessPiece i : list) {
+                if (i != null && !i.equals(piece)) {
+                    i.didnotMove();
+                }
+            }
+        }
         piece.moved();
         promoteChecker(piece);
         turn = !turn;
@@ -287,5 +294,16 @@ public class Chessboard {
         removePiece(piece);
         addPiece(piece.getXPos(), piece.getYPos(), new Knight(this, piece.getColor()));
         updateListeners();
+    }
+
+    public void enpessant(ChessPiece piece, int xpos, int ypos) {
+        System.out.println("EN PESSANT!");
+        if (piece.getColor().equals("white")) {
+            removePiece(getPiece(xpos, ypos + 1));
+        }
+
+        else {
+            removePiece(getPiece(xpos, ypos - 1));
+        }
     }
 }
