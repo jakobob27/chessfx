@@ -9,6 +9,7 @@ public class Chessboard {
     private ChessPiece blackKing;
     private boolean turn = true; // true when it's white's turn, false when it's black's
     private ChessPiece selectedPiece;
+    private boolean enpessant;
 
     public Chessboard() {
         for (int i = 0; i < 8; i++) {
@@ -93,7 +94,10 @@ public class Chessboard {
             System.out.println("Invalid move!");
             return;
         }
-
+        if (enpessant) {
+            enpessant(piece, xpos, ypos);
+            enpessant = false;
+        }
         board.get(piece.getXPos()).set(piece.getYPos(), null);
         board.get(xpos).set(ypos, piece);
         piece.setXPos(xpos);
@@ -294,6 +298,10 @@ public class Chessboard {
         removePiece(piece);
         addPiece(piece.getXPos(), piece.getYPos(), new Knight(this, piece.getColor()));
         updateListeners();
+    }
+
+    public void startEnpessant() {
+        enpessant = true;
     }
 
     public void enpessant(ChessPiece piece, int xpos, int ypos) {

@@ -32,13 +32,14 @@ public class Pawn extends ChessPiece {
             return true;
         } else if (getColor().equals("white") && ypos == getYPos() - 1 && (board.getPiece(xpos, ypos + 1) != null)
                 && board.getPiece(xpos, ypos + 1) instanceof Pawn && board.getPiece(xpos, ypos + 1).justMoved()) {
-            board.enpessant(this, xpos, ypos);
+            board.startEnpessant();
+            ;
             return true;
         }
 
         else if (getColor().equals("black") && ypos == getYPos() + 1 && (board.getPiece(xpos, ypos - 1) != null)
                 && board.getPiece(xpos, ypos - 1) instanceof Pawn && board.getPiece(xpos, ypos - 1).justMoved()) {
-            board.enpessant(this, xpos, ypos);
+            board.startEnpessant();
             return true;
         }
         return false;
