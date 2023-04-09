@@ -92,7 +92,7 @@ public class Chessboard {
     }
 
     public void movePiece(ChessPiece piece, int xpos, int ypos) {
-        if (piece.friendlyfire(xpos, ypos)) {
+        if (piece.friendlyfire(xpos, ypos) || piece.collision(xpos, ypos)) {
             return;
         }
         board.get(piece.getXPos()).set(piece.getYPos(), null);

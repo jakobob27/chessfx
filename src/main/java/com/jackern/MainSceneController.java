@@ -37,8 +37,14 @@ public class MainSceneController implements BoardListener {
             if (child instanceof Pane) {
                 child.setOnMouseClicked(event -> {
                     if (board.getSelectedPiece() != null) {
-                        int ypos = GridPane.getRowIndex(child);
-                        int xpos = GridPane.getColumnIndex(child);
+                        Integer ypos = GridPane.getRowIndex(child);
+                        Integer xpos = GridPane.getColumnIndex(child);
+                        if (xpos == null) {
+                            xpos = 0;
+                        }
+                        if (ypos == null) {
+                            ypos = 0;
+                        }
                         board.movePiece(board.getSelectedPiece(), xpos, ypos);
                         board.selectPiece(null);
                         System.out.println(board.getSelectedPiece());

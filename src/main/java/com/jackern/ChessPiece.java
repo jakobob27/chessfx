@@ -46,7 +46,7 @@ public abstract class ChessPiece {
         }
     }
 
-    protected boolean friendlyfire(int xpos, int ypos) {
+    public boolean friendlyfire(int xpos, int ypos) {
         if (board.getPiece(xpos, ypos) == null) {
             return false;
         }
@@ -58,6 +58,80 @@ public abstract class ChessPiece {
         else {
             return false;
         }
+    }
+
+    public boolean collision(int xpos, int ypos) {
+        int xdiff = xpos - getXPos();
+        int ydiff = ypos - getYPos();
+
+        if (xdiff == 0 && ydiff == 0) {
+            return true;
+        }
+
+        else if (xdiff == 0) {
+            if (ydiff > 0) {
+                for (int i = 1; i < ydiff; i++) {
+                    if (board.getBoardCopy().get(xpos).get(ypos - i) != null) {
+                        return true;
+                    }
+                }
+            } else if (ydiff < 0) {
+                for (int i = -1; i > ydiff; i--) {
+                    if (board.getBoardCopy().get(xpos).get(ypos - i) != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        else if (ydiff == 0) {
+            if (xdiff > 0) {
+                for (int i = 1; i < xdiff; i++) {
+                    if (board.getBoardCopy().get(xpos - i).get(ypos) != null) {
+                        return true;
+                    }
+                }
+            } else if (xdiff < 0) {
+                for (int i = -1; i > xdiff; i--) {
+                    if (board.getBoardCopy().get(xpos - i).get(ypos) != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        else if (ydiff > 0) {
+            if (xdiff > 0) {
+                for (int i = 1; i < xdiff; i++) {
+                    if (board.getBoardCopy().get(xpos - i).get(ypos - i) != null) {
+                        return true;
+                    }
+                }
+            } else if (xdiff < 0) {
+                for (int i = -1; i > xdiff; i--) {
+                    if (board.getBoardCopy().get(xpos - i).get(ypos + i) != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        else if (ydiff < 0) {
+            if (xdiff > 0) {
+                for (int i = 1; i < xdiff; i++) {
+                    if (board.getBoardCopy().get(xpos - i).get(ypos + i) != null) {
+                        return true;
+                    }
+                }
+            } else if (xdiff < 0) {
+                for (int i = -1; i > xdiff; i--) {
+                    if (board.getBoardCopy().get(xpos - i).get(ypos - i) != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public int getValue() {

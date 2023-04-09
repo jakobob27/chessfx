@@ -12,4 +12,9 @@ public class Knight extends ChessPiece {
         throw new UnsupportedOperationException("Unimplemented method 'validMove'");
     }
 
+    @Override
+    public boolean collision(int xpos, int ypos) {
+        return false;
+    }
+
 }
