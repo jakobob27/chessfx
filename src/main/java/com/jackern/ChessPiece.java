@@ -1,6 +1,8 @@
 package com.jackern;
 
-public abstract class ChessPiece {
+import java.io.Serializable;
+
+public abstract class ChessPiece implements Serializable {
     private String color;
     private String id;
     private int value;

@@ -1,15 +1,18 @@
 package com.jackern;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Chessboard {
-    private ArrayList<BoardListener> listeners = new ArrayList<>();
+public class Chessboard implements Serializable {
+    private transient ArrayList<BoardListener> listeners;
     private ArrayList<ArrayList<ChessPiece>> board = new ArrayList<>();
     private ChessPiece whiteKing;
     private ChessPiece blackKing;
     private boolean turn = true; // true when it's white's turn, false when it's black's
     private ChessPiece selectedPiece;
     private boolean enpessant;
+    private boolean checkMate;
+    private boolean staleMate;
 
     public Chessboard() {
         for (int i = 0; i < 8; i++) {
@@ -112,9 +115,11 @@ public class Chessboard {
         piece.moved();
         promoteChecker(piece);
         turn = !turn;
-        if (checkmateChecker()) {
+        if (checkMate) {
             System.out.println("SJAKK MATT!!");
             return;
+        } else if (staleMate) {
+            System.out.println("STALEMATE!");
         }
         if (turn && whiteCheckChecker()) {
             System.out.println("White is in check!");
@@ -238,6 +243,9 @@ public class Chessboard {
     }
 
     public void addListener(BoardListener listener) {
+        if (listeners == null) {
+            listeners = new ArrayList<>();
+        }
         listeners.add(listener);
     }
 
@@ -319,10 +327,7 @@ public class Chessboard {
         }
     }
 
-    public boolean checkmateChecker() {
-        if (!turn && !blackCheckChecker() || turn && !whiteCheckChecker()) {
-            return false;
-        }
+    public void checkmateChecker() {
         for (ArrayList<ChessPiece> list : board) {
             for (ChessPiece piece : list) {
                 if (piece != null && (!turn && piece.getColor().equals("black")
@@ -332,7 +337,7 @@ public class Chessboard {
                             if (piece.validMove(i, j) && !piece.friendlyfire(i, j) && !piece.collision(i, j)
                                     && !selfCheck(piece, i, j)) {
                                 System.out.println(piece + " " + i + " " + j);
-                                return false;
+                                return;
                             }
                         }
                     }
@@ -340,7 +345,16 @@ public class Chessboard {
                 }
             }
         }
+        if (!turn && !blackCheckChecker() || turn && !whiteCheckChecker()) {
+            staleMate = true;
+            return;
+        }
 
-        return true;
+        checkMate = true;
+        return;
+    }
+
+    public boolean gameOver() {
+        return checkMate || staleMate;
     }
 }

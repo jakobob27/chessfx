@@ -1,5 +1,10 @@
 package com.jackern;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 
 import javafx.fxml.FXML;
@@ -13,6 +18,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 public class MainSceneController implements BoardListener {
+
+    private static final String fileName = "board.ser";
 
     private static Chessboard board;
     private static boolean updateComplete;
@@ -42,9 +49,16 @@ public class MainSceneController implements BoardListener {
 
     @FXML
     public void initialize() {
+        initBoardClick();
+        SaveBoard boardState = loadBoardState();
+        if (boardState != null) {
+            board = boardState.getBoard();
+            board.addListener(this);
+            board.updateListeners();
+            return;
+        }
         board = new Chessboard();
         board.addListener(this);
-        initBoardClick();
         board.init();
     }
 
@@ -196,5 +210,27 @@ public class MainSceneController implements BoardListener {
     public static void startPromotion(ChessPiece piece) {
         promotion = true;
         promoting = piece;
+    }
+
+    private static SaveBoard loadBoardState() {
+        try (FileInputStream fileIn = new FileInputStream(fileName);
+                ObjectInputStream in = new ObjectInputStream(fileIn)) {
+            return (SaveBoard) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    public static void saveBoardState() {
+        if (board.gameOver()) {
+            return;
+        }
+        SaveBoard boardState = new SaveBoard(board);
+        try (FileOutputStream fileOut = new FileOutputStream(fileName);
+                ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(boardState);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
