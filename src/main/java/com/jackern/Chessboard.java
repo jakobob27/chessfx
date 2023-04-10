@@ -346,7 +346,7 @@ public class Chessboard implements Serializable {
                         for (int j = 0; j < 8; j++) {
                             if (piece.validMove(i, j) && !piece.friendlyfire(i, j) && !piece.collision(i, j)
                                     && !selfCheck(piece, i, j)) {
-                                System.out.println(piece + " " + i + " " + j);
+                                System.out.println("Valid move: " + piece + " " + i + " " + j);
                                 return;
                             }
                         }
@@ -356,7 +356,6 @@ public class Chessboard implements Serializable {
             }
         }
         if (!turn && !blackCheckChecker() || turn && !whiteCheckChecker()) {
-            System.out.println("yo");
             staleMate = true;
             return;
         }
