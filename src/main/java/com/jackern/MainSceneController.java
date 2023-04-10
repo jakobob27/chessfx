@@ -212,7 +212,7 @@ public class MainSceneController implements BoardListener {
         promoting = piece;
     }
 
-    private static SaveBoard loadBoardState() {
+    public static SaveBoard loadBoardState() {
         try (FileInputStream fileIn = new FileInputStream(fileName);
                 ObjectInputStream in = new ObjectInputStream(fileIn)) {
             return (SaveBoard) in.readObject();
@@ -221,11 +221,11 @@ public class MainSceneController implements BoardListener {
         }
     }
 
-    public static void saveBoardState() {
-        if (board.gameOver()) {
+    public static void saveBoardState(Chessboard saveboard) {
+        if (saveboard.gameOver()) {
             return;
         }
-        SaveBoard boardState = new SaveBoard(board);
+        SaveBoard boardState = new SaveBoard(saveboard);
         try (FileOutputStream fileOut = new FileOutputStream(fileName);
                 ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(boardState);
@@ -233,4 +233,9 @@ public class MainSceneController implements BoardListener {
             e.printStackTrace();
         }
     }
+
+    public static void saveBoardState() {
+        saveBoardState(board);
+    }
+
 }

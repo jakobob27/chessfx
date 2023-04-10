@@ -25,6 +25,7 @@ public class BoardTest implements BoardListener {
     public void init() {
         checker = false;
         board = new Chessboard();
+        board.addListener(this);
     }
 
     @Test
@@ -68,6 +69,13 @@ public class BoardTest implements BoardListener {
         for (int i = 0; i < 8; i++) {
             assertTrue(board.getBoardCopy().get(i).get(6) instanceof Pawn);
         }
+    }
+
+    @Test
+    public void boardMoveTest() {
+        board.init();
+        board.movePiece(board.getPiece(0, 6), 0, 5);
+        assertTrue(board.getPiece(0, 5) instanceof Pawn);
     }
 
     @Test

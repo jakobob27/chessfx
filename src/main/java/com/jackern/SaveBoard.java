@@ -12,4 +12,5 @@ public class SaveBoard implements Serializable {
     public Chessboard getBoard() {
         return board;
     }
+
 }
