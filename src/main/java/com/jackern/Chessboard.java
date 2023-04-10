@@ -112,6 +112,10 @@ public class Chessboard {
         piece.moved();
         promoteChecker(piece);
         turn = !turn;
+        if (checkmateChecker()) {
+            System.out.println("SJAKK MATT!!");
+            return;
+        }
         if (turn && whiteCheckChecker()) {
             System.out.println("White is in check!");
         } else if (!turn && blackCheckChecker()) {
@@ -313,5 +317,30 @@ public class Chessboard {
         else {
             removePiece(getPiece(xpos, ypos - 1));
         }
+    }
+
+    public boolean checkmateChecker() {
+        if (!turn && !blackCheckChecker() || turn && !whiteCheckChecker()) {
+            return false;
+        }
+        for (ArrayList<ChessPiece> list : board) {
+            for (ChessPiece piece : list) {
+                if (piece != null && (!turn && piece.getColor().equals("black")
+                        || turn && piece.getColor().equals("white"))) {
+                    for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
+                            if (piece.validMove(i, j) && !piece.friendlyfire(i, j) && !piece.collision(i, j)
+                                    && !selfCheck(piece, i, j)) {
+                                System.out.println(piece + " " + i + " " + j);
+                                return false;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return true;
     }
 }
