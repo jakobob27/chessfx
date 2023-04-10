@@ -13,6 +13,7 @@ public class Chessboard implements Serializable {
     private boolean enpessant;
     private boolean checkMate;
     private boolean staleMate;
+    private int fiftyMove = 0;
 
     public Chessboard() {
         for (int i = 0; i < 8; i++) {
@@ -114,12 +115,21 @@ public class Chessboard implements Serializable {
         }
         piece.moved();
         promoteChecker(piece);
+        if (piece instanceof Pawn
+                || getPiece(xpos, ypos) != null && getPiece(xpos, ypos).getColor() != piece.getColor()) {
+            fiftyMove = 0;
+        }
         turn = !turn;
+        checkmateChecker();
         if (checkMate) {
             System.out.println("SJAKK MATT!!");
+            updateListeners();
             return;
-        } else if (staleMate) {
+        } else if (staleMate || fiftyMove >= 50) {
+            staleMate = true;
             System.out.println("STALEMATE!");
+            updateListeners();
+            return;
         }
         if (turn && whiteCheckChecker()) {
             System.out.println("White is in check!");
@@ -346,6 +356,7 @@ public class Chessboard implements Serializable {
             }
         }
         if (!turn && !blackCheckChecker() || turn && !whiteCheckChecker()) {
+            System.out.println("yo");
             staleMate = true;
             return;
         }
