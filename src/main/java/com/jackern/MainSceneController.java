@@ -126,7 +126,6 @@ public class MainSceneController implements BoardListener {
 
     @FXML
     public void promoteScreen(ChessPiece piece) {
-        System.out.println("2" + piece);
 
         if (piece.getColor().equals("black")) {
             queenPromote = new ImageView(new Image(App.class.getResource("black-queen.png").toString()));
@@ -197,6 +196,5 @@ public class MainSceneController implements BoardListener {
     public static void startPromotion(ChessPiece piece) {
         promotion = true;
         promoting = piece;
-        System.out.println(promoting);
     }
 }
